@@ -1,0 +1,117 @@
+{
+  "scenarios": [
+    {
+      "id": "workday-week3-scope-change",
+      "title": "Workday implementation week 3 scope change",
+      "description": "A customer adds payroll localization after the SOW and Jira stories already exist.",
+      "artifacts": [
+        { "id": "sf-opp-100", "system": "salesforce", "kind": "opportunity", "version": 1, "title": "Acme Workday Rollout", "content": "Opportunity covers US Workday HCM rollout.", "scope_tags": ["hcm", "us"] },
+        { "id": "gong-call-100", "system": "gong", "kind": "call", "version": 1, "title": "Discovery Call", "content": "Customer requires HCM implementation with go-live in Q3.", "scope_tags": ["hcm"] },
+        { "id": "sow-100", "system": "sharepoint", "kind": "sow", "version": 1, "title": "Implementation SOW", "content": "SOW derived from sf-opp-100 and gong-call-100 for HCM scope.", "scope_tags": ["hcm"] },
+        { "id": "jira-100", "system": "jira", "kind": "story", "version": 1, "title": "Configure HCM", "content": "Story references sow-100 v1 for HCM setup.", "scope_tags": ["hcm"] },
+        { "id": "conf-100", "system": "confluence", "kind": "architecture", "version": 1, "title": "Workday Architecture", "content": "Architecture depends on sow-100 v1 and jira-100 v1.", "scope_tags": ["hcm"] }
+      ],
+      "edges": [
+        { "source": "sow-100", "target": "sf-opp-100", "type": "derives_from" },
+        { "source": "sow-100", "target": "gong-call-100", "type": "derives_from" },
+        { "source": "jira-100", "target": "sow-100", "type": "references" },
+        { "source": "conf-100", "target": "sow-100", "type": "depends_on" },
+        { "source": "conf-100", "target": "jira-100", "type": "references" }
+      ],
+      "mutation_script": [
+        { "tick": 4, "artifact_id": "sow-100", "new_version": 2, "new_content": "SOW now includes US and Canada payroll localization.", "scope_change": true, "expected_flag": "payroll-localization-added" }
+      ],
+      "expected_order": ["sf-opp-100", "gong-call-100", "sow-100", "jira-100", "conf-100"],
+      "expected_scope_flags": ["payroll-localization-added"],
+      "regression_expected_for": ["fast-but-loose-agent", "coherence-regression-agent"]
+    },
+    {
+      "id": "crm-regional-rollout",
+      "title": "Salesforce rollout with regional locale expansion",
+      "description": "A customer expands from two to three locales after proposal generation.",
+      "artifacts": [
+        { "id": "sf-opp-200", "system": "salesforce", "kind": "opportunity", "version": 1, "title": "Regional CRM Rollout", "content": "CRM rollout includes NA and EMEA.", "scope_tags": ["crm", "na", "emea"] },
+        { "id": "slack-200", "system": "slack", "kind": "customer_message", "version": 1, "title": "Locale Thread", "content": "Customer asks about adding APAC after phase one.", "scope_tags": ["crm"] },
+        { "id": "sow-200", "system": "sharepoint", "kind": "sow", "version": 1, "title": "CRM SOW", "content": "SOW references sf-opp-200 v1 for NA and EMEA.", "scope_tags": ["crm"] },
+        { "id": "jira-200", "system": "jira", "kind": "epic", "version": 1, "title": "CRM Localization Epic", "content": "Epic depends on sow-200 v1 and Slack locale confirmation.", "scope_tags": ["crm"] }
+      ],
+      "edges": [
+        { "source": "sow-200", "target": "sf-opp-200", "type": "derives_from" },
+        { "source": "jira-200", "target": "sow-200", "type": "depends_on" },
+        { "source": "jira-200", "target": "slack-200", "type": "references" }
+      ],
+      "mutation_script": [
+        { "tick": 3, "artifact_id": "sf-opp-200", "new_version": 2, "new_content": "CRM rollout includes NA, EMEA, and APAC.", "scope_change": true, "expected_flag": "apac-locale-added" }
+      ],
+      "expected_order": ["sf-opp-200", "slack-200", "sow-200", "jira-200"],
+      "expected_scope_flags": ["apac-locale-added"],
+      "regression_expected_for": ["fast-but-loose-agent", "coherence-regression-agent"]
+    },
+    {
+      "id": "netsuite-discovery-faithfulness",
+      "title": "NetSuite discovery call to artifacts",
+      "description": "A discovery transcript should produce coherent SOW, requirements, and project plan artifacts.",
+      "artifacts": [
+        { "id": "meet-300", "system": "meet", "kind": "recording", "version": 1, "title": "Discovery Recording", "content": "Finance team needs NetSuite revenue recognition and migration from spreadsheets.", "scope_tags": ["erp", "finance"] },
+        { "id": "gong-300", "system": "gong", "kind": "transcript", "version": 1, "title": "Discovery Transcript", "content": "Transcript derives from meet-300 v1 and mentions revenue recognition.", "scope_tags": ["erp"] },
+        { "id": "sow-300", "system": "sharepoint", "kind": "sow", "version": 1, "title": "NetSuite SOW", "content": "SOW derives from gong-300 v1 and includes revenue recognition.", "scope_tags": ["erp"] },
+        { "id": "conf-300", "system": "confluence", "kind": "implementation_plan", "version": 1, "title": "ERP Plan", "content": "Plan references sow-300 v1 and migration dependencies.", "scope_tags": ["erp"] }
+      ],
+      "edges": [
+        { "source": "gong-300", "target": "meet-300", "type": "derives_from" },
+        { "source": "sow-300", "target": "gong-300", "type": "derives_from" },
+        { "source": "conf-300", "target": "sow-300", "type": "depends_on" }
+      ],
+      "mutation_script": [
+        { "tick": 5, "artifact_id": "gong-300", "new_version": 2, "new_content": "Transcript corrected to include revenue recognition and deferred revenue migration.", "scope_change": true, "expected_flag": "deferred-revenue-added" }
+      ],
+      "expected_order": ["meet-300", "gong-300", "sow-300", "conf-300"],
+      "expected_scope_flags": ["deferred-revenue-added"],
+      "regression_expected_for": ["fast-but-loose-agent", "coherence-regression-agent"]
+    },
+    {
+      "id": "outlook-golive-replan",
+      "title": "Outlook go-live replan",
+      "description": "A go-live change in a customer message must reflow dependent plan and ticket dates without duplication.",
+      "artifacts": [
+        { "id": "outlook-400", "system": "outlook", "kind": "thread", "version": 1, "title": "Go-live Message", "content": "Customer asks to move go-live from June to August.", "scope_tags": ["timeline"] },
+        { "id": "sow-400", "system": "sharepoint", "kind": "sow", "version": 1, "title": "Timeline SOW", "content": "SOW references outlook-400 v1 with June go-live.", "scope_tags": ["timeline"] },
+        { "id": "jira-400", "system": "jira", "kind": "release", "version": 1, "title": "Release Plan", "content": "Release depends on sow-400 v1 and June milestones.", "scope_tags": ["timeline"] },
+        { "id": "teams-400", "system": "teams", "kind": "status", "version": 1, "title": "Status Update", "content": "Status references jira-400 v1.", "scope_tags": ["timeline"] }
+      ],
+      "edges": [
+        { "source": "sow-400", "target": "outlook-400", "type": "derives_from" },
+        { "source": "jira-400", "target": "sow-400", "type": "depends_on" },
+        { "source": "teams-400", "target": "jira-400", "type": "references" }
+      ],
+      "mutation_script": [
+        { "tick": 2, "artifact_id": "outlook-400", "new_version": 2, "new_content": "Customer confirms August go-live and asks for dependency impact.", "scope_change": true, "expected_flag": "golive-shifted-august" }
+      ],
+      "expected_order": ["outlook-400", "sow-400", "jira-400", "teams-400"],
+      "expected_scope_flags": ["golive-shifted-august"],
+      "regression_expected_for": ["fast-but-loose-agent", "coherence-regression-agent"]
+    },
+    {
+      "id": "two-fde-confluence-collision",
+      "title": "Two FDEs edit a Confluence space concurrently",
+      "description": "Concurrent edits must preserve supersession edges and avoid duplicated work items.",
+      "artifacts": [
+        { "id": "conf-500a", "system": "confluence", "kind": "design_doc", "version": 1, "title": "Integration Design A", "content": "Design page A references jira-500 v1.", "scope_tags": ["integration"] },
+        { "id": "conf-500b", "system": "confluence", "kind": "design_doc", "version": 1, "title": "Integration Design B", "content": "Design page B supersedes conf-500a v1.", "scope_tags": ["integration"] },
+        { "id": "jira-500", "system": "jira", "kind": "story", "version": 1, "title": "Integration Story", "content": "Story references conf-500a v1.", "scope_tags": ["integration"] },
+        { "id": "sow-500", "system": "sharepoint", "kind": "sow", "version": 1, "title": "Integration SOW", "content": "SOW depends on conf-500b v1.", "scope_tags": ["integration"] }
+      ],
+      "edges": [
+        { "source": "conf-500b", "target": "conf-500a", "type": "supersedes" },
+        { "source": "jira-500", "target": "conf-500a", "type": "references" },
+        { "source": "sow-500", "target": "conf-500b", "type": "depends_on" }
+      ],
+      "mutation_script": [
+        { "tick": 6, "artifact_id": "conf-500a", "new_version": 2, "new_content": "Design page A changed API authentication from token to mTLS.", "scope_change": true, "expected_flag": "auth-design-mtls" }
+      ],
+      "expected_order": ["conf-500a", "conf-500b", "jira-500", "sow-500"],
+      "expected_scope_flags": ["auth-design-mtls"],
+      "regression_expected_for": ["fast-but-loose-agent", "coherence-regression-agent"]
+    }
+  ]
+}
