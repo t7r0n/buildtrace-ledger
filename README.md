@@ -4,14 +4,18 @@ A local evaluation harness for implementation agents that generate and update ar
 
 The harness grades four axes:
 
-- artifact coherence across systems
-- temporal correctness of dependent writes
-- idempotency under reruns
-- scope-change detection precision and recall
+## Problem shape
 
-Everything runs locally with synthetic fixtures. No external APIs, credentials, customer data, or hosted tracing backend are required.
+Local cross-system coherence harness for implementation agents.
 
-## Quick Start
+## What the harness exercises
+
+- Replays the main `auctor-trace` scenario from source-controlled fixtures.
+- Pushes degraded `Cross-System Coherence Harness` cases through the same path as clean cases, then compares the evidence.
+- Frames `Cross-System Coherence Harness` as a working evaluator rather than a static concept mock.
+- Leaves `auctor-trace` generated state outside git while keeping the rebuild path short.
+
+## Local workflow
 
 ```bash
 uv sync
@@ -21,12 +25,22 @@ uv run auctor-trace verify
 uv run auctor-trace dashboard
 ```
 
-Generated artifacts are written under `runs/` and `outputs/`.
-
-## Outputs
+## Review surfaces
 
 - `runs/latest/results.duckdb` stores scenario, model, trace, and score rows
 - `outputs/summary.json` stores the leaderboard and regression report
 - `outputs/traces.jsonl` stores OpenTelemetry-shaped spans
 - `outputs/dashboard.html` gives a self-contained visual Gantt and finding summary
 - `outputs/demo_pack/` is a portable evidence bundle
+
+## Quality checks
+
+```bash
+uv run ruff check .
+uv run pytest -q
+uv run auctor-trace verify
+```
+
+## Repository hygiene
+
+`Cross-System Coherence Harness` is built for local reproduction: deterministic inputs enter the run, deterministic evidence comes out, and private data stays outside the repo.
