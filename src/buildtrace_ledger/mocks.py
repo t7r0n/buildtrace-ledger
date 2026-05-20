@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import uuid
 
-from auctor_trace.models import Artifact, ArtifactEdge, Mutation, ObservedRun, Scenario, ToolSpan
+from buildtrace_ledger.models import Artifact, ArtifactEdge, Mutation, ObservedRun, Scenario, ToolSpan
 
 
 SYSTEMS = ("salesforce", "gong", "jira", "confluence", "sharepoint", "slack", "outlook", "teams", "meet")

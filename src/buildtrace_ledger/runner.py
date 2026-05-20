@@ -9,10 +9,10 @@ from typing import Any
 
 import duckdb
 
-from auctor_trace.mocks import run_mock_agent
-from auctor_trace.models import RunSummary, ScenarioResult, project_root
-from auctor_trace.scenarios import load_scenarios
-from auctor_trace.scorer import score_run, seeded_bug_precision
+from buildtrace_ledger.mocks import run_mock_agent
+from buildtrace_ledger.models import RunSummary, ScenarioResult, project_root
+from buildtrace_ledger.scenarios import load_scenarios
+from buildtrace_ledger.scorer import score_run, seeded_bug_precision
 
 MODELS = ("reference-agent", "fast-but-loose-agent", "coherence-regression-agent")
 
@@ -154,7 +154,7 @@ def verify_outputs() -> dict[str, Any]:
     trace_path = root / "outputs" / "traces.jsonl"
     db_path = root / "runs" / "latest" / "results.duckdb"
     if not summary_path.exists() or not trace_path.exists() or not db_path.exists():
-        raise FileNotFoundError("Run `uv run auctor-trace run` before verification.")
+        raise FileNotFoundError("Run `uv run buildtrace-ledger run` before verification.")
     summary = RunSummary.model_validate_json(summary_path.read_text(encoding="utf-8"))
     conn = duckdb.connect(str(db_path), read_only=True)
     result_count = conn.execute("select count(*) from results").fetchone()[0]

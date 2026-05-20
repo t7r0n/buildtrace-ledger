@@ -1,5 +1,5 @@
 [project]
-name = "auctor-trace"
+name = "buildtrace-ledger"
 version = "0.1.0"
 description = "Local cross-system coherence harness for implementation agents."
 readme = "README.md"
@@ -17,7 +17,7 @@ dependencies = [
 ]
 
 [project.scripts]
-auctor-trace = "auctor_trace.cli:main"
+buildtrace-ledger = "buildtrace_ledger.cli:main"
 
 [build-system]
 requires = ["uv_build>=0.9.21,<0.10.0"]

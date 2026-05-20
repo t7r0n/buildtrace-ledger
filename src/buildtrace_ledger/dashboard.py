@@ -5,8 +5,8 @@ from pathlib import Path
 import duckdb
 from jinja2 import Environment, select_autoescape
 
-from auctor_trace.models import RunSummary, project_root
-from auctor_trace.runner import verify_outputs
+from buildtrace_ledger.models import RunSummary, project_root
+from buildtrace_ledger.runner import verify_outputs
 
 TEMPLATE = """
 <!doctype html>
@@ -129,7 +129,7 @@ def build_dashboard() -> Path:
     root = project_root()
     summary_path = root / "outputs" / "summary.json"
     if not summary_path.exists():
-        raise FileNotFoundError("Run `uv run auctor-trace run` before dashboard generation.")
+        raise FileNotFoundError("Run `uv run buildtrace-ledger run` before dashboard generation.")
     summary = RunSummary.model_validate_json(summary_path.read_text(encoding="utf-8"))
     env = Environment(autoescape=select_autoescape(["html", "xml"]))
     html = env.from_string(TEMPLATE).render(summary=summary, verification=verify_outputs(), gantt=gantt_rows())
@@ -142,7 +142,7 @@ def benchmark_summary() -> dict[str, float]:
     root = project_root()
     db_path = root / "runs" / "latest" / "results.duckdb"
     if not db_path.exists():
-        raise FileNotFoundError("Run `uv run auctor-trace run` first.")
+        raise FileNotFoundError("Run `uv run buildtrace-ledger run` first.")
     conn = duckdb.connect(str(db_path), read_only=True)
     row = conn.execute("select avg(span_count), avg(artifact_count), count(*) from results").fetchone()
     conn.close()

@@ -2,11 +2,11 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from auctor_trace.dashboard import build_dashboard
-from auctor_trace.mocks import run_mock_agent
-from auctor_trace.runner import init_demo, run_suite, verify_outputs
-from auctor_trace.scenarios import load_scenarios
-from auctor_trace.scorer import build_graph, score_run
+from buildtrace_ledger.dashboard import build_dashboard
+from buildtrace_ledger.mocks import run_mock_agent
+from buildtrace_ledger.runner import init_demo, run_suite, verify_outputs
+from buildtrace_ledger.scenarios import load_scenarios
+from buildtrace_ledger.scorer import build_graph, score_run
 
 
 def test_end_to_end_run_and_verify() -> None:

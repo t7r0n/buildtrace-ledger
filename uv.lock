@@ -21,7 +21,7 @@ wheels = [
 ]
 
 [[package]]
-name = "auctor-trace"
+name = "buildtrace-ledger"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [

@@ -4,7 +4,7 @@ from collections.abc import Sequence
 
 import networkx as nx
 
-from auctor_trace.models import Artifact, ArtifactEdge, ObservedRun, Scenario, Score
+from buildtrace_ledger.models import Artifact, ArtifactEdge, ObservedRun, Scenario, Score
 
 EDGE_WEIGHTS = {
     "derives_from": 1.4,

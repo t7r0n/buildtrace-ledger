@@ -3,8 +3,8 @@ from __future__ import annotations
 import typer
 from rich.console import Console
 
-from auctor_trace.dashboard import benchmark_summary, build_dashboard
-from auctor_trace.runner import export_demo_pack, init_demo, run_suite, verify_outputs
+from buildtrace_ledger.dashboard import benchmark_summary, build_dashboard
+from buildtrace_ledger.runner import export_demo_pack, init_demo, run_suite, verify_outputs
 
 app = typer.Typer(help="Local cross-system coherence harness.")
 console = Console()

@@ -10,19 +10,19 @@ Local cross-system coherence harness for implementation agents.
 
 ## What the harness exercises
 
-- Replays the main `auctor-trace` scenario from source-controlled fixtures.
+- Replays the main `buildtrace-ledger` scenario from source-controlled fixtures.
 - Pushes degraded `Cross-System Coherence Harness` cases through the same path as clean cases, then compares the evidence.
 - Frames `Cross-System Coherence Harness` as a working evaluator rather than a static concept mock.
-- Leaves `auctor-trace` generated state outside git while keeping the rebuild path short.
+- Leaves `buildtrace-ledger` generated state outside git while keeping the rebuild path short.
 
 ## Local workflow
 
 ```bash
 uv sync
-uv run auctor-trace init-demo
-uv run auctor-trace run --iterations 3
-uv run auctor-trace verify
-uv run auctor-trace dashboard
+uv run buildtrace-ledger init-demo
+uv run buildtrace-ledger run --iterations 3
+uv run buildtrace-ledger verify
+uv run buildtrace-ledger dashboard
 ```
 
 ## Review surfaces
@@ -38,7 +38,7 @@ uv run auctor-trace dashboard
 ```bash
 uv run ruff check .
 uv run pytest -q
-uv run auctor-trace verify
+uv run buildtrace-ledger verify
 ```
 
 ## Repository hygiene

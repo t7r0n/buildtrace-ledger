@@ -5,7 +5,7 @@ from pathlib import Path
 
 from pydantic import BaseModel
 
-from auctor_trace.models import Scenario, project_root
+from buildtrace_ledger.models import Scenario, project_root
 
 
 class ScenarioFile(BaseModel):
